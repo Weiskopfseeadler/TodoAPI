@@ -75,7 +75,8 @@ namespace TodoApi.Services
             string salt ="";
             int i;
             string c;
-            var regexItem = new Regex("^[a-zA-Z0-9 ]*$");
+            var regexChar = new Regex("^[a-z ]*$");
+            var regexNumber = new Regex("^[a-z0-9 ]*$");
   
              i = user.Name.Length % Convert.ToInt32(user.Email.Length);         
             for (int e = 0; e < 3; e++)
@@ -84,22 +85,41 @@ namespace TodoApi.Services
                 {
                        i = user.Name.Length%i;
                 }
+             if (i>= user.Email.Length)
+            {
+                i =  user.Email.Length-1;
+            } 
                     
             salt = salt + user.Email.ElementAt(i);
             c=Convert.ToString(user.Email.ElementAt(i));
-            if(regexItem.IsMatch(c)){
+            c=  c.ToLower();
+            if(regexChar.IsMatch(c)){
+                
                 i = dict[c];
             }
              if (i!=0)
                 {
                      i = user.Name.Length%i;  
                 }
+            if (i>= user.Name.Length)
+            {
+                i =  user.Name.Length-1;
+            } 
          
             salt= salt+user.Name.ElementAt(i);
-            c = salt+user.Name.ElementAt(i);
-                if(!regexItem.IsMatch(c))
+            c =Convert.ToString(user.Email.ElementAt(i));
+            c  = c.ToLower();
+                if(!regexChar.IsMatch(c))
                 {
-                i = dict[c];
+                    System.Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                    System.Console.WriteLine(c);
+                    i = dict[c];
+                }
+                if (!regexNumber.IsMatch(c))
+                {
+                    System.Console.WriteLine("==================================================");
+                    System.Console.WriteLine(c);
+                    i = Convert.ToInt32(c);
                 }
             
             }

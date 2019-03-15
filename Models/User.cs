@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace TodoApi.Models
 {
@@ -8,7 +9,6 @@ namespace TodoApi.Models
     {
         public long Id {get;set;}
         public string Name {get;set;}
-
         public string Email {get;set;}
         public byte[] Pwhash {get;set;}
         public IEnumerable<TodoItem> TodoItem {get;set;}

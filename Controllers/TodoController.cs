@@ -66,7 +66,10 @@ namespace TodoApi.Controllers
         {
             if (id!=0)
             {
-                todoItem.User = _context.Users.Find(id);
+                System.Console.WriteLine("____________________________________________________");
+                System.Console.WriteLine(id);
+                todoItem.User = _context.Users.First((x)=>x.Id == id);
+                System.Console.WriteLine(todoItem.User);
             }
             _context.TodoItems.Add(todoItem);
             await _context.SaveChangesAsync();

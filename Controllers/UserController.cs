@@ -74,7 +74,7 @@ namespace TodoApi.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
-           // user.Pwhash = SecurityService.Hash(user.Pwhash,SecurityService.creatSalt(user));
+
            System.Console.WriteLine("*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
            user.Pwhash = SecurityService.Hash(user);
            System.Console.WriteLine(user.Name);
@@ -87,21 +87,42 @@ namespace TodoApi.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // POST: api/User
-        [HttpPost("{Check}")]
+  
+        [HttpPost("Check")]
         public async Task<ActionResult<User>> CheckUser(User user)
         {
            // user.Pwhash = SecurityService.Hash(user.Pwhash,SecurityService.creatSalt(user));
            System.Console.WriteLine("*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+           if (user.Name == "Teapot")
+           {
+               return StatusCode(418);
+           }
            System.Console.WriteLine(user.Pwhash);
-           User dbUser = _context.Users.Where;
-            SecurityService.CanAuthenticate(SecurityService.Hash(user),dbUser.Pwhash);
+           try
+           {
+              User dbtestUser = _context.Users.First(t=> t.Name == user.Name ); 
+           }
+           catch (System.Exception)
+           {
+               
+               return StatusCode(409);
+           }
+           
+           User dbUser = _context.Users.First(t=> t.Name == user.Name ); 
+           user.Email = dbUser.Email;
             
-            dbUser.Pwhash = null;
-            return dbUser;
+            
+            
+            if( SecurityService.CanAuthenticate(SecurityService.Hash(user),dbUser.Pwhash))
+            {                
+                dbUser.Pwhash = null;
+                return dbUser;
+            }
+            return StatusCode(409);
+
+
         }
 
-        // PUT: api/User/5
         [HttpPut("{id}")]
         public async Task<ActionResult<IEnumerable<User>>> PutUser(long id, User user)
         {

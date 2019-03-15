@@ -33,7 +33,7 @@ namespace TodoApi
                 builder => builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .AllowCredentials()));
+                    /*.AllowCredentials()*/));
 
                     
          services.AddDbContext<ToDoContext>(options =>
